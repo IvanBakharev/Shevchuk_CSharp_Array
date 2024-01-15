@@ -1,25 +1,74 @@
-﻿
+﻿using System;
 
-//Планируемые затраты на плитку
-
-decimal plannedCostOfTiles1, plannedCostOfTiles2, plannedCostOfTiles3;
-
+namespace RawMaterialPlanning
 {
-    decimal sandForTail1 = 5, sandForTail2 = 3, sandForTail3 = 2;
 
-    decimal clayForTail1 = 4, clayForTail2 = 7, clayForTail3 = 6;
+    class Program
+    {  
+        static void Main(string[] args)
+        {
+            int numberOfTipesOfTile, numberOfTypesOfMaterials;
+            {
+                Console.WriteLine("Введите кличество разновидностей плитки:");
+                numberOfTipesOfTile = int.Parse(Console.ReadLine());
 
-    decimal sandPrice = 70, clayPrice = 50; // rub.kg
+                Console.WriteLine("Введите количество видов сырья для изготовления плитки:");
+                numberOfTypesOfMaterials = int.Parse(Console.ReadLine());
+            }
+            decimal[,] A = new decimal[numberOfTipesOfTile, numberOfTypesOfMaterials];
+           
+            decimal[,] B = new decimal[numberOfTypesOfMaterials, 1];
+            
+            decimal[] C = new decimal[numberOfTipesOfTile];
 
-    //Планируемый объем плитки
-    decimal plannedVolumeOfTiles1 = 80, plannedVolumeOfTiles2 = 140, plannedVolumeOfTiles3 = 60;
+            decimal[,] Z = new decimal[numberOfTipesOfTile, 1];
 
-    //Расчитать планируемые затраты на Плитку: 1-2-3
-    plannedCostOfTiles1 = (sandForTail1 * sandPrice + clayForTail1 * clayPrice) * plannedVolumeOfTiles1;
-    plannedCostOfTiles2 = (sandForTail2 * sandPrice + clayForTail2 * clayPrice) * plannedVolumeOfTiles2;
-    plannedCostOfTiles3 = (sandForTail3 * sandPrice + clayForTail3 * clayPrice) * plannedVolumeOfTiles3;
+            for (int i  = 0; i < A.GetLength(0); i++)
+            {
+                for (int j = 0; j < A.GetLength(1); j++)
+                {
+                    Console.Write($"Введите количество сырья № {j + 1} для плитки № {i + 1} (кг.):");
+                    A[i, j] = Convert.ToDecimal(Console.ReadLine());
+                }
+            }
+
+            for (int i = 0; i < B.GetLength(0); i++)
+            {
+                Console.Write($"Введите цену сырья № {i + 1} (руб.): ");
+                B[i, 0] = Convert.ToDecimal(Console.ReadLine());
+            }
+            
+            for (int i = 0; i < C.Length; i++)
+            {
+                Console.Write($"Введите планируемый объем выпуска плитки № {i + 1} (в штукаках.):");
+                C[i] = Convert.ToDecimal(Console.ReadLine());
+            }
+
+            // Z CalculateTotalCostOfMaterials (A, B, C, Z)
+            {
+                for (int i = 0; i < A.GetLongLength(0); i++)
+                {
+                    for (int j = 0; j < A.GetLongLength(1); j++)
+                    {
+                        Z[i, 0] += A[i, j] * B[j, 0];
+                    }
+                }
+
+                decimal P = 0;
+
+                for (int i = 0; i < Z.GetLength(0); i++)
+                {
+                    P += C[i] * Z[i, 0];
+                }
+
+                Console.WriteLine($"Общая стоимость сырья = {P}");
+
+            }
+
+
+
+
+
+        }
+    }
 }
-
-decimal totalcost = plannedCostOfTiles1 + plannedCostOfTiles2 + plannedCostOfTiles3;
-
-Console.WriteLine($"Общая стоимость сырья = {totalcost}");
